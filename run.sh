@@ -1,0 +1,1 @@
+D:\Dokumenty\Projekty\PIRO\venv\Scripts\python.exe D:\Dokumenty\Projekty\PIRO\project1\main.py $1 $2
