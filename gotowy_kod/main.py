@@ -8,6 +8,7 @@ from image_preprocessing import rotate_scale_and_cut_image_v6
 
 from pathlib import Path
 from image_operations import *
+from image_comparing import get_output_list_of_images
 
 def get_ordered_images_paths(images_paths):
     path, filename = os.path.split(images_paths[0])
@@ -30,15 +31,15 @@ if __name__ == '__main__':
         exit(1)
     args = sys.argv
     path = os.path.join(os.path.split(args[1])[0], os.path.split(args[1])[1])
-    n_images = args[2]
-
+    n_images = int(args[2])
+    
     images_paths = glob.glob(os.path.join(path, '*.png'))
     images_paths = get_ordered_images_paths(images_paths)
-    images = [io.imread(image_path) for image_path in images_paths]
+    images = [io.imread(image_path) for image_path in images_paths[:n_images]]
     max_height, max_width = max_height_and_width_from_images(images)
     processed_images = [rotate_scale_and_cut_image_v6(image, max_height, max_width) for image in images]
 
-
+    get_output_list_of_images(processed_images)
 
 
 
