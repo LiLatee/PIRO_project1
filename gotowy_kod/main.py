@@ -35,17 +35,28 @@ if __name__ == '__main__':
     images_paths = glob.glob(os.path.join(path, '*.png'))
     images_paths = get_ordered_images_paths(images_paths)
     images = [io.imread(image_path) for image_path in images_paths]
-    # processed_images = [rotate_scale_and_cut_image_v6(image) for image in images]
-
     max_height, max_width = max_height_and_width_from_images(images)
-    result_path = Path("./../data/proj1_daneB_wyniki/set8")
-    processed_images = list()
-    for i, image in enumerate(images):
-        _, filename = os.path.split(images_paths[i])
-        
-        processed_image = rotate_scale_and_cut_image_v6(image, images_paths[i], max_height, max_width)
+    processed_images = [rotate_scale_and_cut_image_v6(image, max_height, max_width) for image in images]
 
-        save_path = os.path.join(os.path.join(result_path, filename))
-        io.imsave(save_path, arr=img_as_ubyte(processed_image))
+
+
+
+
+
+
+
+
+
+    ############## testowanko ##############
+    # max_height, max_width = max_height_and_width_from_images(images)
+    # result_path = Path("./../data/proj1_daneB_wyniki/set8")
+    # processed_images = list()
+    # for i, image in enumerate(images):
+    #     _, filename = os.path.split(images_paths[i])
+        
+    #     processed_image = rotate_scale_and_cut_image_v6(image, max_height, max_width, images_paths[i])
+
+    #     save_path = os.path.join(os.path.join(result_path, filename))
+    #     io.imsave(save_path, arr=img_as_ubyte(processed_image))
 
 

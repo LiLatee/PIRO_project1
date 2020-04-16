@@ -59,10 +59,10 @@ if __name__ == "__main__":
     programdir_path = os.path.abspath(sys.argv[1])
     data_path = os.path.abspath(sys.argv[2])
     
-#     print("AUTORZY:")
-#     with open(os.path.join(programdir_path, 'autorzy.txt'), 'rt') as f:
-#         for l in f.readlines():
-#             print(l.strip())
+    print("AUTORZY:")
+    with open(os.path.join(programdir_path, 'autorzy.txt'), 'rt') as f:
+        for l in f.readlines():
+            print(l.strip())
     
     program_path = os.path.join(programdir_path, 'run.bat')
     os.chmod(program_path, os.stat(program_path).st_mode | 0o100)#stat.S_IEXEC)

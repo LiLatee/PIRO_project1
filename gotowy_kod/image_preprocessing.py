@@ -11,7 +11,7 @@ from util import *
 
 # v6
 # sprawdza wykryte po kolei kąty w wielokącie i szuka dwóch dających sumę 180 lub o równych kątach, ale z przedziału 70-110
-def rotate_scale_and_cut_image_v6(image, image_path, max_height, max_width):
+def rotate_scale_and_cut_image_v6(image, max_height, max_width, image_path=None):
     image = add_black_border_to_image(image, width_of_border=30)
     counter_of_tries = 0
     baselines = list()
@@ -21,7 +21,7 @@ def rotate_scale_and_cut_image_v6(image, image_path, max_height, max_width):
         counter_of_tries += 1
         if baseline is not None:
             baselines.append(baseline)
-    min_length = image.shape[0] if image.shape[0] >= image.shape[1] else image.shape[1]
+    
 
     if len(baselines) != 0:
         longest_line_index = np.argmax([get_line_length(line[0], line[1]) for line in baselines]) 
@@ -29,8 +29,10 @@ def rotate_scale_and_cut_image_v6(image, image_path, max_height, max_width):
     else:
         baseline = None
 
+    min_length = image.shape[0] if image.shape[0] >= image.shape[1] else image.shape[1]
     if baseline is None or get_line_length(baseline[0], baseline[1]) < min_length/5:
-        print('Nie znaleziono podstawy dla obrazka z użyciem v6: {0}'.format(image_path))
+        if image_path is not None:
+            print('Nie znaleziono podstawy dla obrazka z użyciem v6: {0}'.format(image_path))
         image = threshold_image(image)
         angle, baseline = get_angle_to_rotate_image_based_on_longest_line(image)
         baseline = [(el[1],el[0]) for el in baseline]
@@ -151,8 +153,8 @@ def get_points_at_the_base_multi(list_of_points, angles_of_points):
             continue
 #         print((list_of_points[i-1], list_of_points[i]))
 #         print(last_angle, angle)
-        is_sum_180 = compare_2_numbers_with_range(last_angle + angle, 180, range=5)
-        same_angles = compare_2_numbers_with_range(last_angle, angle, range=5)
+        is_sum_180 = compare_2_numbers_with_range(last_angle + angle, 180, range=20)
+        same_angles = compare_2_numbers_with_range(last_angle, angle, range=10)
         if is_sum_180 or (same_angles and angle > 70 and angle < 110):
 #             print("tak")
             result.append((list_of_points[i-1], list_of_points[i]))

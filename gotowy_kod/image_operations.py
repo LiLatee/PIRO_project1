@@ -135,15 +135,23 @@ def add_black_border_to_image(image, width_of_border=30):
     image = new_image_top_border
     return image
 
+
 def rotate_image_if_wrong_orientation(image):
     # dodatkowe sprawdzenie czy nie jest do góry nogami
     n_of_pixels_top_bot = int(image.shape[0]*0.1)
     n_of_pixels_left_right = int(image.shape[1]*0.1)
-    white_black_ratio_first_row = get_white_to_black_ratio_in_array(image[:n_of_pixels_top_bot, :])
     
-    if white_black_ratio_first_row > 0.8:
-        image = img_as_bool(rotate(image, 180, resize=True))
-    
+    white_black_ratio_top = get_white_to_black_ratio_in_array(image[:n_of_pixels_top_bot, :])
+    white_black_ratio_down = get_white_to_black_ratio_in_array(image[-n_of_pixels_top_bot:, :])
+    counter = 0
+#     print("white_black_ratio_top: ", white_black_ratio_top)
+#     print("white_black_ratio_down: ", white_black_ratio_down)
+    while (white_black_ratio_top > 0.3 or white_black_ratio_down < 0.9) and counter < 4:
+        counter +=1
+        image = img_as_bool(rotate(image, 90, resize=True))
+        white_black_ratio_top = get_white_to_black_ratio_in_array(image[:n_of_pixels_top_bot, :])
+        white_black_ratio_down = get_white_to_black_ratio_in_array(image[-n_of_pixels_top_bot:, :])
+
     # sprawdzenie czy nie wykryło podstawy jako lewego boku, czyli czy nie leży na lewym boku 
     white_black_ratio_left_column = get_white_to_black_ratio_in_array(image[:, :n_of_pixels_left_right])
     white_black_ratio_right_column = get_white_to_black_ratio_in_array(image[:, -n_of_pixels_left_right:]) 
@@ -161,7 +169,37 @@ def rotate_image_if_wrong_orientation(image):
         image = img_as_bool(rotate(image, 90, resize=True))     
         image = add_black_border_to_image(image, width_of_border=30)
         image = cut_image_sides(image)
-        
+
     return image
+
+
+# def rotate_image_if_wrong_orientation(image):
+#     # dodatkowe sprawdzenie czy nie jest do góry nogami
+#     n_of_pixels_top_bot = int(image.shape[0]*0.1)
+#     n_of_pixels_left_right = int(image.shape[1]*0.1)
+#     white_black_ratio_first_row = get_white_to_black_ratio_in_array(image[:n_of_pixels_top_bot, :])
+    
+#     if white_black_ratio_first_row > 0.8:
+#         image = img_as_bool(rotate(image, 180, resize=True))
+    
+#     # sprawdzenie czy nie wykryło podstawy jako lewego boku, czyli czy nie leży na lewym boku 
+#     white_black_ratio_left_column = get_white_to_black_ratio_in_array(image[:, :n_of_pixels_left_right])
+#     white_black_ratio_right_column = get_white_to_black_ratio_in_array(image[:, -n_of_pixels_left_right:]) 
+
+#     if (white_black_ratio_right_column > 0.85 and white_black_ratio_left_column < 0.2):
+#         image = img_as_bool(rotate(image, -90, resize=True))
+#         image = add_black_border_to_image(image, width_of_border=30)
+#         image = cut_image_sides(image)
+    
+#     # sprawdzenie czy nie wykryło podstawy jako prawego boku, czyli czy nie leży na prawym boku 
+#     white_black_ratio_left_column = get_white_to_black_ratio_in_array(image[:, :n_of_pixels_left_right])
+#     white_black_ratio_right_column = get_white_to_black_ratio_in_array(image[:, -n_of_pixels_left_right:]) 
+    
+#     if (white_black_ratio_right_column < 0.2 and white_black_ratio_left_column > 0.85) :
+#         image = img_as_bool(rotate(image, 90, resize=True))     
+#         image = add_black_border_to_image(image, width_of_border=30)
+#         image = cut_image_sides(image)
+        
+#     return image
 
     
